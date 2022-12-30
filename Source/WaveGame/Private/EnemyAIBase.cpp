@@ -2,7 +2,8 @@
 
 
 #include "EnemyAIBase.h"
-#include "Components/StaticMeshComponent.h"
+//#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "TimerManager.h"
@@ -30,9 +31,9 @@ AEnemyAIBase::AEnemyAIBase()
 	SphereComponent->SetSimulatePhysics(false);
 	RootComponent = SphereComponent;
 
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	MeshComponent->SetCanEverAffectNavigation(false);
-	MeshComponent->SetupAttachment(SphereComponent);
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
+	SkeletalMeshComponent->SetCanEverAffectNavigation(false);
+	SkeletalMeshComponent->SetupAttachment(SphereComponent);
 
 	EnemyHealthComponent = CreateDefaultSubobject<UHealthComponentBase>(TEXT("EnemyHealthComponent"));
 
