@@ -23,7 +23,7 @@ class WAVEGAME_API AEnemyAIBase : public APawn
 public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
-	class UStaticMeshComponent* MeshComponent;
+	class USkeletalMeshComponent* SkeletalMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	class USphereComponent* SphereComponent;

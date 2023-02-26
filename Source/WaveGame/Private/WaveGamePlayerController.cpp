@@ -26,10 +26,10 @@ void AWaveGamePlayerController::BeginPlay()
 	}
 }
 
-void AWaveGamePlayerController::AddPitchInput(float Val)
-{
-	RotationInput.Pitch += !IsLookInputIgnored() ? Val * InputPitchScale : 0.f;
-}
+//void AWaveGamePlayerController::AddPitchInput(float Val)
+//{
+//	RotationInput.Pitch += !IsLookInputIgnored() ? Val * InputPitchScale : 0.f;
+//}
 
 void AWaveGamePlayerController::Tick(float DeltaTime)
 {
