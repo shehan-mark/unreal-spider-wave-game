@@ -12,7 +12,8 @@ enum class EnemyState : uint8
 	IDLE = 0 UMETA(DisplayName = "IDLE"),
 	MOVING = 1 UMETA(DisplayName = "MOVING"),
 	DEAD = 2 UMETA(DisplayName = "DEAD"),
-	ATTACK = 3 UMETA(DisplayName = "ATTACK")
+	ATTACK = 3 UMETA(DisplayName = "ATTACK"),
+	STUNNED = 4 UMETA(DisplayName = "STUNNED")
 };
 
 UCLASS()
