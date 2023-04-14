@@ -39,9 +39,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
 	float MovementSpeed;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
+	float TurnSpeed;
+
 	AActor* CurrentTargetActor;
 
-	FVector CurrentTargetActorLKP;
+	FVector CurrentTargetActorLoc;
 
 	FVector LastStartingLocation;
 
@@ -60,7 +63,7 @@ protected:
 
 protected:
 
-	float GetEnemyToTargetPointLength(FVector TargetPoint);
+	float GetSelfToTargetPointLength(FVector TargetPoint);
 
 	virtual void BeginPlay() override;
 
@@ -91,7 +94,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartAttack();
 
-	bool CheckIfCurrentTargetPointReached();
+	bool CheckIfNextTargetPointReached();
 
 	void PushBack(FVector NewPosition);
 
