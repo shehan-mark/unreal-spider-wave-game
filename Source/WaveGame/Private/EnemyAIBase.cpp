@@ -26,7 +26,7 @@ AEnemyAIBase::AEnemyAIBase()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 
-	SphereComponent->InitSphereRadius(30.f);
+	SphereComponent->InitSphereRadius(40.f);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	SphereComponent->SetSimulatePhysics(false);
 	RootComponent = SphereComponent;
@@ -63,7 +63,11 @@ void AEnemyAIBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, 
 		CurrentDamageTarget = CurrentTurret;
 		if (AIC)
 		{
-			AIC->StartAttack();
+			GetWorldTimerManager().ClearTimer(TimerHandle_StartAttack);
+			// adding a little bit of delay before attack so we have time to play the turn animation towards the turret
+			FTimerDelegate TimerDel;
+			TimerDel.BindUFunction(this, FName("BeginAttack"), AIC);
+			GetWorldTimerManager().SetTimer(TimerHandle_StartAttack, TimerDel, 1.0f, false, 1.0f);
 		}
 	}
 	else
@@ -90,6 +94,11 @@ void AEnemyAIBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, 
 			AIC->OnDirectionUpdate.Broadcast(CurrLocation, NewPos);
 		}
 	}
+}
+
+void AEnemyAIBase::BeginAttack(ABasicEnemyAIC* AIC)
+{
+	AIC->StartAttack();
 }
 
 // Called every frame
@@ -124,7 +133,7 @@ void AEnemyAIBase::Die()
 	AController* APC = GetController();
 	if (APC)
 	{
-		SetEnemyStatus(EnemyState::DEAD);
+		EnemyStatus = EnemyState::DEAD;
 		//APC->UnPossess();
 		APC->SetLifeSpan(LifeSpanAfterDeath);
 		SetLifeSpan(LifeSpanAfterDeath);
@@ -133,6 +142,7 @@ void AEnemyAIBase::Die()
 
 void AEnemyAIBase::Stun(float StunDuration)
 {
+	EnemyStatus = EnemyState::STUNNED;
 	GetWorldTimerManager().ClearTimer(TimerHandle_UnStun);
 	Stunned = true;
 	// start timer to unstun enemy
@@ -141,6 +151,7 @@ void AEnemyAIBase::Stun(float StunDuration)
 
 void AEnemyAIBase::UnStun()
 {
+	EnemyStatus = EnemyState::IDLE;
 	Stunned = false;
 }
 
