@@ -59,12 +59,12 @@ void ABasicEnemyAIC::Tick(float DeltaTime)
 
 	//BlackBoardComponent->SetValueAsEnum(FName("EnemyState"), (uint8)CurrentPawn->GetEnemyStatus());
 
-	FindAndMakeTarget(DeltaTime);
+	/*FindAndMakeTarget(DeltaTime);
 
 	if (bPushingBack)
 	{
 		CurrentPawn->SetActorLocation(FMath::Lerp(CurrentPawn->GetActorLocation(), PushedBackToPoint, TurnSpeed));
-	}
+	}*/
 	
 }
 
