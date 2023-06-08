@@ -3,9 +3,10 @@
 #include "WaveGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
-#include "EnemyAIBase.h"
+//#include "EnemyAIBase.h"
 #include "BasicProjectile.h"
 #include "TurretHead.h"
+#include "EnemyAI.h"
 #include "WaveGamePlayerController.h"
 
 AWaveGameMode::AWaveGameMode()
@@ -72,13 +73,13 @@ void AWaveGameMode::CheckWaveState()
 
 	bool bIsAnyEnemyAlive = false;
 	TArray<AActor*> EnemiesInWorld;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIBase::StaticClass(), EnemiesInWorld);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAI::StaticClass(), EnemiesInWorld);
 
 	if (EnemiesInWorld.Num() > 0)
 	{
 		for (int i = 0; i < EnemiesInWorld.Num(); i++)
 		{
-			AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(EnemiesInWorld[i]);
+			AEnemyAI* Enemy = Cast<AEnemyAI>(EnemiesInWorld[i]);
 			if (Enemy && Enemy->GetEnemyStatus() != EnemyState::DEAD)
 			{
 				bIsAnyEnemyAlive = true;
@@ -109,6 +110,8 @@ void AWaveGameMode::SpawnNewEnemy()
 {
 	if (IsValid(SpawnEnemy))
 	{
+		check(GEngine != nullptr);
+
 		FActorSpawnParameters SpawnParams;
 
 		// finding random location/ point in a circle to spawn enemies.
@@ -116,17 +119,24 @@ void AWaveGameMode::SpawnNewEnemy()
 		float XCoordinate = FMath::Cos(Theta) * SpawnCircleRadius;
 		float YCoordinate = FMath::Sin(Theta) * SpawnCircleRadius;
 
-		AEnemyAIBase* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyAIBase>(SpawnEnemy, FVector(XCoordinate, YCoordinate, 20.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		AEnemyAI* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyAI>(SpawnEnemy, FVector(XCoordinate, YCoordinate, 55.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 
-		// maintain of enemy loop game logic
-		NumOfEnemiesToSpawn--;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TRYING TO SPAWN NEW ENEMY"));
 
-		if (NumOfEnemiesToSpawn <= 0)
+		if(SpawnedEnemy != nullptr)
 		{
-			// done spawning for the current wave
-			GetWorldTimerManager().ClearTimer(TimerHandle_EnemySpawner);
-			WaveStatus = WaveGameModeState::WAVEINPROGRESS;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("SPAWNING NEW ENEMY - SUCCESS"));
+			// maintain of enemy loop game logic
+			NumOfEnemiesToSpawn--;
+
+			if (NumOfEnemiesToSpawn <= 0)
+			{
+				// done spawning for the current wave
+				GetWorldTimerManager().ClearTimer(TimerHandle_EnemySpawner);
+				WaveStatus = WaveGameModeState::WAVEINPROGRESS;
+			}
 		}
+
 	}
 }
 

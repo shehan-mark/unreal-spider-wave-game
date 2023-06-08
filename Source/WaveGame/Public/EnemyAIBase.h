@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HealthComponent")
 	float LifeSpanAfterDeath;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	class UBehaviorTree* BehaviorTree;
+
 protected:
 
 	EnemyState EnemyStatus;

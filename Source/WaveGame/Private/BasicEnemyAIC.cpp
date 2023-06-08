@@ -16,16 +16,16 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 
-#include "EnemyAIBase.h"
+//#include "EnemyAIBase.h"
+#include "EnemyAI.h"
 #include "TurretHead.h"
 
 
 ABasicEnemyAIC::ABasicEnemyAIC()
 {
-	//BlackBoardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackBoardComponent"));
-
-	// this is what tells our behavior tree what to do
-	//BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
+	BlackBoardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackBoardComponent"));
+	BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
+	TargetLocationKey = "TargetLocation";
 
 	TargetPointReachThreshold = 50.f;
 	AttackRadius = 190.0f;
@@ -39,10 +39,15 @@ void ABasicEnemyAIC::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	if (InPawn != nullptr)
+	CurrentPawn = Cast<AEnemyAI>(InPawn);
+	if (CurrentPawn)
 	{
-		CurrentPawn = Cast<AEnemyAIBase>(InPawn);
-
+		if (CurrentPawn->BehaviorTree->BlackboardAsset)
+		{
+			// if behavior tree property of our possesing pawn is correct. We are initializing it and starting the Tree.
+			BlackBoardComponent->InitializeBlackboard(*CurrentPawn->BehaviorTree->BlackboardAsset);
+			BehaviorTreeComponent->StartTree(*CurrentPawn->BehaviorTree);
+		}
 	}
 }
 
@@ -78,7 +83,7 @@ void ABasicEnemyAIC::FindAndMakeTarget(float DeltaTime)
 {
 	if (bPushingBack) return;
 
-	if (CurrentPawn->IsStunned()) return;
+	//if (CurrentPawn->IsStunned()) return;
 
 	// find/ get turrets in the level and pick one for the attack.
 	TArray<AActor*> Turrets;
@@ -86,7 +91,7 @@ void ABasicEnemyAIC::FindAndMakeTarget(float DeltaTime)
 	// no turrets exist
 	if (Turrets.Num() < 1)
 	{
-		CurrentPawn->SetEnemyStatus(EnemyState::IDLE);
+		//CurrentPawn->SetEnemyStatus(EnemyState::IDLE);
 		return;
 	}
 
@@ -161,7 +166,7 @@ void ABasicEnemyAIC::MovePawnManually(float DeltaTime)
 	// if reached dont move till we get a new updated path point.
 	if (CheckIfNextTargetPointReached()) return;
 
-	CurrentPawn->SetEnemyStatus(EnemyState::MOVING);
+	//CurrentPawn->SetEnemyStatus(EnemyState::MOVING);
 	FVector DiffVector = NextTargetPoint - CurrentPawn->GetActorLocation();
 	float Magnitude = FMath::Sqrt(FMath::Pow(DiffVector.X, 2) + FMath::Pow(DiffVector.Y, 2) + FMath::Pow(DiffVector.Y, 2));
 	FVector NormalizedVector = FVector(DiffVector.X / Magnitude, DiffVector.Y / Magnitude, DiffVector.Z / Magnitude);
@@ -202,22 +207,22 @@ void ABasicEnemyAIC::ResetPushBack()
 void ABasicEnemyAIC::StartAttack()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("STARTING TO ATTACK..."));
-	CurrentPawn->SetEnemyStatus(EnemyState::ATTACK);
-	GetWorldTimerManager().SetTimer(TimerHandle_EnemyAttack, this, &ABasicEnemyAIC::AttackTarget, CurrentPawn->AttackRate, true, 0.0f);
+	//CurrentPawn->SetEnemyStatus(EnemyState::ATTACK);
+	//GetWorldTimerManager().SetTimer(TimerHandle_EnemyAttack, this, &ABasicEnemyAIC::AttackTarget, CurrentPawn->AttackRate, true, 0.0f);
 }
 
 void ABasicEnemyAIC::AttackTarget()
 {
 	float DistanceToAttack = GetSelfToTargetPointLength(FVector(CurrentTargetActorLoc.X, CurrentTargetActorLoc.Y, CurrentPawn->GetActorLocation().Z));
 	bool bCloseEnoughToDoDamage = DistanceToAttack <= AttackRadius;
-	if (bCloseEnoughToDoDamage && CurrentPawn->CurrentDamageTarget && CurrentPawn->CurrentDamageTarget->GetTurretStatus() != TurretState::DEAD)
+	/*if (bCloseEnoughToDoDamage && CurrentPawn->CurrentDamageTarget && CurrentPawn->CurrentDamageTarget->GetTurretStatus() != TurretState::DEAD)
 	{
 		CurrentPawn->DoDamage();
 	}
 	else
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle_EnemyAttack);
-	}
+	}*/
 }
 
 float ABasicEnemyAIC::GetSelfToTargetPointLength(FVector TargetPoint)

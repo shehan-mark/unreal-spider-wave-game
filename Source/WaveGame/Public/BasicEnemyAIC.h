@@ -18,12 +18,6 @@ class WAVEGAME_API ABasicEnemyAIC : public AAIController
 	
 public:
 
-	//UPROPERTY(EditDefaultsOnly, Category = "AI")
-	//class UBlackboardComponent* BlackBoardComponent;
-
-	//UPROPERTY(EditDefaultsOnly, Category = "AI")
-	//class UBehaviorTreeComponent* BehaviorTreeComponent;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
 	float AttackRadius;
 
@@ -31,7 +25,7 @@ public:
 	float TargetPointReachThreshold;
 
 	UPROPERTY(BlueprintReadOnly)
-	class AEnemyAIBase* CurrentPawn;
+	class AEnemyAI* CurrentPawn;
 
 	UPROPERTY()
 	FOnDirectionUpdate OnDirectionUpdate;
@@ -53,6 +47,15 @@ public:
 	bool bPushingBack;
 
 	FVector PushedBackToPoint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	class UBlackboardComponent* BlackBoardComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	class UBehaviorTreeComponent* BehaviorTreeComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FName TargetLocationKey;
 
 protected:
 
