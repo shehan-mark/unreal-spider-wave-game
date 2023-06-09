@@ -3,6 +3,7 @@
 
 #include "EnemyAI.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
 #include "HealthComponentBase.h"
 
 // Sets default values
@@ -10,8 +11,12 @@ AEnemyAI::AEnemyAI()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	MovementSpeed = 350.f;
 
 	EnemyHealthComponent = CreateDefaultSubobject<UHealthComponentBase>(TEXT("EnemyHealthComponent"));
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = MovementSpeed;
 	
 }
 

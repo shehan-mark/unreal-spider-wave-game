@@ -14,7 +14,7 @@ AWaveGameMode::AWaveGameMode()
 	TimeBetweenWaves = 2.0f;
 	SpawnCircleRadius = 1000.0f;
 	MaxWaveCount = 5;
-	EnemyWaveMultiplier = 2;
+	EnemyWaveMultiplier = 10;
 
 	PrimaryActorTick.TickInterval = 1.0f;
 	PrimaryActorTick.bCanEverTick = true;

@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float MovementSpeed;
+
 protected:
 
 	EnemyState Status;
