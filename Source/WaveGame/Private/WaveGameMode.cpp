@@ -12,9 +12,9 @@
 AWaveGameMode::AWaveGameMode()
 {
 	TimeBetweenWaves = 2.0f;
-	SpawnCircleRadius = 1000.0f;
+	SpawnCircleRadius = 2000.0f;
 	MaxWaveCount = 5;
-	EnemyWaveMultiplier = 10;
+	EnemyWaveMultiplier = 2;
 
 	PrimaryActorTick.TickInterval = 1.0f;
 	PrimaryActorTick.bCanEverTick = true;
@@ -121,11 +121,11 @@ void AWaveGameMode::SpawnNewEnemy()
 
 		AEnemyAI* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyAI>(SpawnEnemy, FVector(XCoordinate, YCoordinate, 55.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TRYING TO SPAWN NEW ENEMY"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TRYING TO SPAWN NEW ENEMY"));
 
 		if(SpawnedEnemy != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("SPAWNING NEW ENEMY - SUCCESS"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("SPAWNING NEW ENEMY - SUCCESS"));
 			// maintain of enemy loop game logic
 			NumOfEnemiesToSpawn--;
 

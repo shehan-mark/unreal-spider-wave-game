@@ -4,8 +4,10 @@
 #include "BTTargetPointResolve.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "BasicEnemyAIC.h"
+#include "TurretHead.h"
 
 /*
 **
@@ -41,6 +43,19 @@ EBTNodeResult::Type UBTTargetPointResolve::ExecuteTask(UBehaviorTreeComponent& O
         //    //Remember that the Array provided by the Controller function contains AActor* objects so we need to cast.
         //    NextTargetPoint = Cast<ABotTargetPoint>(AvailableTargetPoints[RandomIndex]);
         //} while (CurrentPoint == NextTargetPoint);
+        check(GEngine != nullptr);
+
+        FVector TargetLocation(-190.0f, -67.0f, 51.f);
+        TArray<AActor*> PlayerTurret;
+        UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretHead::StaticClass(), PlayerTurret);
+        if (PlayerTurret.Num() != 0)
+        {
+            ATurretHead* Player = Cast<ATurretHead>(PlayerTurret[0]);
+            FVector PlayerLocation = Player->GetActorLocation();
+            GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player Turret Found - Location - %f, %f, %f"), PlayerLocation.X - 50, PlayerLocation.Y - 50, 51.f));
+            TargetLocation = FVector(PlayerLocation.X - 50, PlayerLocation.Y - 50, 51.f);
+        }
+
 
         //Update the next location in the Blackboard so the bot can move to the next Blackboard value
         BlackboardComp->SetValueAsVector("TargetLocation", FVector(-190.f, -67.f, 51.f));
