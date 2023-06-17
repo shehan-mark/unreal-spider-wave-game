@@ -3,10 +3,11 @@
 #include "WaveGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
-//#include "EnemyAIBase.h"
 #include "BasicProjectile.h"
 #include "TurretHead.h"
 #include "EnemyAI.h"
+//#include "EnemyAIBase.h"
+
 #include "WaveGamePlayerController.h"
 
 AWaveGameMode::AWaveGameMode()
@@ -91,7 +92,7 @@ void AWaveGameMode::CheckWaveState()
 	/*for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; ++It)
 	{
 		APawn* _Pawn = It->Get();
-		AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(_Pawn);
+		AEnemyAI* Enemy = Cast<AEnemyAI>(_Pawn);
 		if (Enemy && Enemy->GetEnemyStatus() != EnemyState::DEAD)
 		{
 			bIsAnyEnemyAlive = true;
@@ -168,12 +169,12 @@ void AWaveGameMode::EndWave()
 void AWaveGameMode::DestroyAndStartOver()
 {
 	// this array has to be the type of AActor because GetAllActorsOfClass is not a template function
-	// so cannot pass the exact AEnemyAIBase type. Will have to cast on iteration
+	// so cannot pass the exact AEnemyAI type. Will have to cast on iteration
 	TArray<AActor*> EnemyAIs;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIBase::StaticClass(), EnemyAIs);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAI::StaticClass(), EnemyAIs);
 	for (AActor* TActor : EnemyAIs)
 	{
-		AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(TActor);
+		AEnemyAI* Enemy = Cast<AEnemyAI>(TActor);
 
 		if (Enemy != nullptr)
 		{

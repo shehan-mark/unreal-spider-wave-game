@@ -1,23 +1,36 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyAI.h"
 
-#include "GameFramework/CharacterMovementComponent.h"
-#include "HealthComponentBase.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/FloatingPawnMovement.h" 
 
 // Sets default values
 AEnemyAI::AEnemyAI()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	MovementSpeed = 350.f;
 
-	EnemyHealthComponent = CreateDefaultSubobject<UHealthComponentBase>(TEXT("EnemyHealthComponent"));
-	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
-	MovementComponent->MaxWalkSpeed = MovementSpeed;
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	SphereComponent->InitSphereRadius(40.f);
+	SphereComponent->SetCollisionProfileName(TEXT("BasicEnemy"));
+	RootComponent = SphereComponent;
 	
+	SphereComponentArea = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponentArea"));
+	SphereComponentArea->InitSphereRadius(120.f);
+	SphereComponentArea->SetCollisionProfileName(TEXT("EnemyMass"));
+	SphereComponent->SetupAttachment(RootComponent);
+
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
+	SkeletalMeshComponent->SetCanEverAffectNavigation(false);
+	SkeletalMeshComponent->SetupAttachment(SphereComponent);
+
+	MovementSpeed = 350.f;
+	PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>("PawnMovementComponent");
+	PawnMovementComponent->MaxSpeed = MovementSpeed;
+	bUseControllerRotationYaw = true;
+
 }
 
 // Called when the game starts or when spawned

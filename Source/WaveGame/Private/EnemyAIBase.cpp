@@ -48,9 +48,9 @@ AEnemyAIBase::AEnemyAIBase()
 void AEnemyAIBase::BeginPlay()
 {
 	Super::BeginPlay();
-	EnemyStatus = EnemyState::IDLE;
+	//EnemyStatus = EnemyState::IDLE;
 
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyAIBase::OnCollisionOverlap);
+	//SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyAIBase::OnCollisionOverlap);
 }
 
 void AEnemyAIBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -108,15 +108,15 @@ void AEnemyAIBase::Tick(float DeltaTime)
 
 }
 
-void AEnemyAIBase::SetEnemyStatus(EnemyState Status)
-{
-	EnemyStatus = Status;
-}
-
-EnemyState AEnemyAIBase::GetEnemyStatus()
-{
-	return EnemyStatus;
-}
+//void AEnemyAIBase::SetEnemyStatus(EnemyState Status)
+//{
+//	EnemyStatus = Status;
+//}
+//
+//EnemyState AEnemyAIBase::GetEnemyStatus()
+//{
+//	return EnemyStatus;
+//}
 
 void AEnemyAIBase::DoDamage()
 {
@@ -130,30 +130,30 @@ void AEnemyAIBase::DoDamage()
 
 void AEnemyAIBase::Die()
 {
-	AController* APC = GetController();
-	if (APC)
-	{
-		EnemyStatus = EnemyState::DEAD;
-		//APC->UnPossess();
-		APC->SetLifeSpan(LifeSpanAfterDeath);
-		SetLifeSpan(LifeSpanAfterDeath);
-	}
+	//AController* APC = GetController();
+	//if (APC)
+	//{
+	//	EnemyStatus = EnemyState::DEAD;
+	//	//APC->UnPossess();
+	//	APC->SetLifeSpan(LifeSpanAfterDeath);
+	//	SetLifeSpan(LifeSpanAfterDeath);
+	//}
 }
 
-void AEnemyAIBase::Stun(float StunDuration)
-{
-	EnemyStatus = EnemyState::STUNNED;
-	GetWorldTimerManager().ClearTimer(TimerHandle_UnStun);
-	Stunned = true;
-	// start timer to unstun enemy
-	GetWorldTimerManager().SetTimer(TimerHandle_UnStun, this, &AEnemyAIBase::UnStun, 1.0f, false, StunDuration);
-}
+//void AEnemyAIBase::Stun(float StunDuration)
+//{
+//	EnemyStatus = EnemyState::STUNNED;
+//	GetWorldTimerManager().ClearTimer(TimerHandle_UnStun);
+//	Stunned = true;
+//	// start timer to unstun enemy
+//	GetWorldTimerManager().SetTimer(TimerHandle_UnStun, this, &AEnemyAIBase::UnStun, 1.0f, false, StunDuration);
+//}
 
-void AEnemyAIBase::UnStun()
-{
-	EnemyStatus = EnemyState::IDLE;
-	Stunned = false;
-}
+//void AEnemyAIBase::UnStun()
+//{
+//	EnemyStatus = EnemyState::IDLE;
+//	Stunned = false;
+//}
 
 bool AEnemyAIBase::IsStunned()
 {

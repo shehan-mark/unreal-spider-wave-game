@@ -58,7 +58,7 @@ void AForcePush::StartPush(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		{
 			EnemyAIC->PushBack(NewPos);
 		}
-		HitEnemy->Stun(EnemyStunDuration);
+		//HitEnemy->Stun(EnemyStunDuration);
 	}
 }
 

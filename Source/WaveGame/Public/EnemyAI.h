@@ -3,36 +3,49 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "EnemyAIBase.h"
+#include "GameFramework/Pawn.h"
 #include "EnemyAI.generated.h"
 
+UENUM(BlueprintType)
+enum class EnemyState : uint8
+{
+	IDLE = 0 UMETA(DisplayName = "IDLE"),
+	MOVING = 1 UMETA(DisplayName = "MOVING"),
+	DEAD = 2 UMETA(DisplayName = "DEAD"),
+	ATTACK = 3 UMETA(DisplayName = "ATTACK"),
+	STUNNED = 4 UMETA(DisplayName = "STUNNED")
+};
+
 UCLASS()
-class WAVEGAME_API AEnemyAI : public ACharacter
+class WAVEGAME_API AEnemyAI : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	class UHealthComponentBase* EnemyHealthComponent;
+	// Sets default values for this pawn's properties
+	AEnemyAI();
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-	float MovementSpeed;
-
 protected:
 
-	EnemyState Status;
+	UPROPERTY(EditDefaultsOnly, Category = "Mass")
+	float MovementSpeed;
 
-public:
-	// Sets default values for this character's properties
-	AEnemyAI();
+	UPROPERTY(VisibleAnywhere, Category = "Mass")
+	class USkeletalMeshComponent* SkeletalMeshComponent;
 
-	UFUNCTION(BlueprintCallable)
-	EnemyState GetEnemyStatus() { return Status; };
+	UPROPERTY(VisibleAnywhere, Category = "Mass")
+	class USphereComponent* SphereComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Mass")
+	class USphereComponent* SphereComponentArea;
+
+	UPROPERTY(VisibleAnywhere, Category = "Mass")
+	class UFloatingPawnMovement* PawnMovementComponent;
+
+	EnemyState EnemyStatus;
 
 protected:
 	// Called when the game starts or when spawned
@@ -45,4 +58,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	EnemyState GetEnemyStatus() { return EnemyStatus; };
+
+	UFUNCTION(BlueprintCallable)
+	class UFloatingPawnMovement* GetPawnMovementComponent() { return PawnMovementComponent; };
 };

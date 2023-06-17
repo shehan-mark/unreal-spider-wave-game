@@ -10,7 +10,6 @@
 #include "NavigationSystem.h" 
 #include "NavigationPath.h"
 #include "Kismet/GameplayStatics.h"
-//#include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h" 
 #include "Components/SphereComponent.h"
 #include "DrawDebugHelpers.h"
@@ -40,6 +39,8 @@ void ABasicEnemyAIC::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	CurrentPawn = Cast<AEnemyAI>(InPawn);
+	check(GEngine != nullptr);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TREE STARTED!!!!"));
 	if (CurrentPawn)
 	{
 		if (CurrentPawn->BehaviorTree->BlackboardAsset)
