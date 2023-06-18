@@ -29,8 +29,9 @@ AEnemyAI::AEnemyAI()
 	MovementSpeed = 350.f;
 	PawnMovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>("PawnMovementComponent");
 	PawnMovementComponent->MaxSpeed = MovementSpeed;
+	//PawnMovementComponent->turn
 	bUseControllerRotationYaw = true;
-
+	
 }
 
 // Called when the game starts or when spawned
