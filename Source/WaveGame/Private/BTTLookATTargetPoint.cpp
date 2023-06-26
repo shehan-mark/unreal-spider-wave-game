@@ -26,6 +26,8 @@ UBTTLookATTargetPoint::UBTTLookATTargetPoint(const FObjectInitializer& ObjectIni
 	// accept only actors and vectors
 	BlackboardKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTLookATTargetPoint, BlackboardKey), AActor::StaticClass());
 	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTLookATTargetPoint, BlackboardKey));
+
+	TargetLocation = FVector(0, 0, 0);
 }
 
 EBTNodeResult::Type UBTTLookATTargetPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -57,7 +59,7 @@ EBTNodeResult::Type UBTTLookATTargetPoint::UpdateLookAtTask(UBehaviorTreeCompone
 	if (BlackboardKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
 	{
 		TargetLocation = Blackboard->GetValue<UBlackboardKeyType_Vector>(BlackboardKey.GetSelectedKeyID());
-		DrawDebugDirectionalArrow(GetWorld(), Pawn->GetActorLocation(), TargetLocation, 5.0f, FColor::Red, true, 3.0f);
+		//DrawDebugDirectionalArrow(GetWorld(), Pawn->GetActorLocation(), TargetLocation, 5.0f, FColor::Red, true, 3.0f);
 	}
 	else
 	{
@@ -73,28 +75,33 @@ void UBTTLookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 
 	check(GEngine != nullptr);
 	
-	// how much rotation needs to face the target.
-	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Pawn->GetActorLocation(), TargetLocation);
+	if (TargetLocation.IsNearlyZero()) return;
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("---------------------------------------"));
+	
+	// How much rotation needs to face the target.
+	FVector PawnDirectionVector = Pawn->GetActorForwardVector() + Pawn->GetActorLocation();
+	//DrawDebugDirectionalArrow(GetWorld(), PawnDirectionVector, TargetLocation, 5.0f, FColor::Blue, true, 3.0f);
+	
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(PawnDirectionVector, TargetLocation);
 	Pawn->SetActorRotation(FMath::Lerp(Pawn->GetController()->GetControlRotation(), LookAtRotation, TurnSpeed));
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("------------------- Running"));
+	// Target direction from the Spider towards the TargetLocation.
+	FVector TargetDirection = TargetLocation - Pawn->GetActorLocation();
+	TargetDirection.Normalize();
+	
+	float AngleDotProduct = FVector::DotProduct(Pawn->GetActorForwardVector(), TargetDirection);
+	float AngleDegrees = FMath::RadiansToDegrees(acosf(AngleDotProduct));
 
-	FVector PawnForwardVector = Pawn->GetActorForwardVector();
-	FVector PawnForwardVectorTotal = Pawn->GetActorForwardVector() + Pawn->GetActorLocation();
-	DrawDebugDirectionalArrow(GetWorld(), PawnForwardVectorTotal, TargetLocation, 5.0f, FColor::Blue, true, 3.0f);
-	UE_LOG(LogTemp, Warning, TEXT("PawnForwardVector X - %f, Y - %f, Z - %f"), PawnForwardVector.X, PawnForwardVector.Y, PawnForwardVector.Z);
-	UE_LOG(LogTemp, Error, TEXT("PawnForwardVectorTotal X - %f, Y - %f, Z - %f"), PawnForwardVectorTotal.X, PawnForwardVectorTotal.Y, PawnForwardVectorTotal.Z);
-	//DrawDebugSphere(GetWorld(), Pawn->GetActorForwardVector(), 100, 5, FColor::Red, true, -1, 0, 2);
-	//DrawDebugSphere(GetWorld(), TargetLocation, 20, 5, FColor::Blue, true, -1, 0, 2);
+	//FString AngleDegreesString = TEXT("Angle - ") + FString::SanitizeFloat(AngleDegrees);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, *AngleDegreesString);
+	//FString DotProductString = TEXT("DotProduct - ") + FString::SanitizeFloat(AngleDotProduct);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, DotProductString);
 
-	float DotProduct = FVector::DotProduct(PawnForwardVectorTotal, TargetLocation);
-	FString PrintStatement = TEXT("DotProduct - ") + FString::SanitizeFloat(DotProduct);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, PrintStatement);
-
-	if (DotProduct > 0.0f)
+	if (AngleDotProduct <= 1 && AngleDotProduct > 0.9)
 	{
-		// finish task
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Finishing The Task"));
+		// Finish task
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Finishing The Task"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	
