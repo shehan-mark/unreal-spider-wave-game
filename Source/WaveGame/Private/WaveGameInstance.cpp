@@ -4,6 +4,7 @@
 #include "WaveGameInstance.h"
 
 #include "MasterView.h"
+#include "WaveGameManagerHub.h"
 #include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -19,6 +20,17 @@ UWaveGameInstance::UWaveGameInstance(const FObjectInitializer& ObjectIntializer)
 	}
 
 	MasterViewRef = MasterViewWidget.Class;
+}
+
+void UWaveGameInstance::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	// initializing the ManagerHub
+	if (ManagerHubClass.Get())
+	{
+		ManagerHub = NewObject<UWaveGameManagerHub>(this, ManagerHubClass);
+	}
 }
 
 void UWaveGameInstance::InitiateUI()
