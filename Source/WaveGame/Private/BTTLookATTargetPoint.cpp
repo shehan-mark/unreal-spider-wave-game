@@ -10,6 +10,10 @@
 #include "AISystem.h"
 #include "Kismet/KismetMathLibrary.h" 
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "WaveGameInstance.h"
+#include "EnemyManager.h"
+#include "WaveGameManagerHub.h"
 
 #include "EnemyAI.h"
 
@@ -59,6 +63,13 @@ EBTNodeResult::Type UBTTLookATTargetPoint::UpdateLookAtTask(UBehaviorTreeCompone
 	if (BlackboardKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
 	{
 		TargetLocation = Blackboard->GetValue<UBlackboardKeyType_Vector>(BlackboardKey.GetSelectedKeyID());
+		// Updating enemy manager with Pawn's data
+		UWaveGameInstance* GameInstance = Cast<UWaveGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (GameInstance)
+		{
+			UEnemyManager* EnemyManager = GameInstance->GetManagerHub()->GetManager<UEnemyManager>();
+			EnemyManager->SetEnemyTargetLocation(Pawn->GetName(), TargetLocation);
+		}
 		//DrawDebugDirectionalArrow(GetWorld(), Pawn->GetActorLocation(), TargetLocation, 5.0f, FColor::Red, true, 3.0f);
 	}
 	else
