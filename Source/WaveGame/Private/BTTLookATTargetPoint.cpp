@@ -112,7 +112,7 @@ void UBTTLookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* N
 	if (AngleDotProduct <= 1 && AngleDotProduct > 0.9)
 	{
 		// Finish task
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Finishing The Task"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Finishing The Task"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	

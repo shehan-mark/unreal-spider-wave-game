@@ -26,4 +26,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsLocationAvailable(FString QuerierName, FVector TestingTargetLocation);
+
+	/*
+	* Debug helper
+	*/
+	void PrintVectors(FString Message, FVector VectorValue);
 };
