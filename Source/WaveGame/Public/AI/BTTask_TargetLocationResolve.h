@@ -16,6 +16,14 @@ class WAVEGAME_API UBTTask_TargetLocationResolve : public UBTTask_RunEQSQuery
 {
 	GENERATED_BODY()
 	
+public:
+
+	/*
+		How random should enemies pick the location from best results.
+	*/
+	UPROPERTY(EditAnywhere)
+	int32 RandomNess;
+
 protected:
 
 	//UPROPERTY()

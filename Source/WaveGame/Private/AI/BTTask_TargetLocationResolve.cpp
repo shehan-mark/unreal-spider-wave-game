@@ -10,7 +10,7 @@ UBTTask_TargetLocationResolve::UBTTask_TargetLocationResolve(const FObjectInitia
 	: Super(ObjectInitializer)
 {
 	NodeName = "Run EQS Query And Pick Best Option";
-
+	RandomNess = 10;
 	QueryFinishedDelegate = FQueryFinishedSignature::CreateUObject(this, &UBTTask_TargetLocationResolve::OnQueryFinished);
 
 }
@@ -70,7 +70,7 @@ void UBTTask_TargetLocationResolve::OnQueryFinished(TSharedPtr<FEnvQueryResult> 
 		FVector BestOption = Result->GetItemAsLocation(BestIndex);
 		if ((PreviousPickedLocation - BestOption).Size() <= 20.f)
 		{
-			BestIndex++;
+			BestIndex = FMath::RandRange(BestIndex + 1, RandomNess);
 			BestOption = Result->GetItemAsLocation(BestIndex);
 		}
 		
