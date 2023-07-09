@@ -3,8 +3,8 @@
 
 #include "AI/BTTask_FindCloseTarget.h"
 #include "Kismet/GameplayStatics.h"
-#include "TurretHead.h"
-#include "BasicEnemyAIC.h"
+#include "Player/TurretHead.h"
+#include "AI/BasicEnemyAIC.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_FindCloseTarget::UBTTask_FindCloseTarget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTTask_FindCloseTarget::ExecuteTask(UBehaviorTreeComponent&
 
 	TArray<AActor*> TurretTargets;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretHead::StaticClass(), TurretTargets);
-	if (TurretTargets[0] != nullptr && AIController)
+	if (TurretTargets.Num() != 0 && AIController)
 	{
 		UBlackboardComponent* BlackboardComp = AIController->BlackBoardComponent;
 		BlackboardComp->SetValueAsObject("TargetActor", TurretTargets[0]);

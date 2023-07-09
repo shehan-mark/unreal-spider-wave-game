@@ -3,12 +3,12 @@
 #include "WaveGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
-#include "BasicProjectile.h"
-#include "TurretHead.h"
-#include "EnemyAI.h"
+#include "Player/BasicProjectile.h"
+#include "Player/TurretHead.h"
+#include "AI/EnemyAI.h"
 //#include "EnemyAIBase.h"
 
-#include "WaveGamePlayerController.h"
+#include "Player/WaveGamePlayerController.h"
 
 AWaveGameMode::AWaveGameMode()
 {

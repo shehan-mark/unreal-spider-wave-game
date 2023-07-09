@@ -3,7 +3,7 @@
 
 #include "WaveGameInstance.h"
 
-#include "MasterView.h"
+#include "UI/MasterView.h"
 #include "WaveGameManagerHub.h"
 #include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"

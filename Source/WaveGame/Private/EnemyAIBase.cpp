@@ -12,11 +12,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 
-#include "HealthComponentBase.h"
+#include "Common/HealthComponentBase.h"
 #include "DrawDebugHelpers.h"
-#include "BasicEnemyAIC.h"
-#include "TurretHead.h"
-#include "ForcePush.h"
+#include "AI/BasicEnemyAIC.h"
+#include "Player/TurretHead.h"
+#include "Player/ForcePush.h"
 
 // Sets default values
 AEnemyAIBase::AEnemyAIBase()
