@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/BTTLookATTargetPoint.h"
+#include "AI/BTTask_LookATTargetPoint.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
@@ -17,9 +17,9 @@
 
 #include "AI/EnemyAI.h"
 
-#include UE_INLINE_GENERATED_CPP_BY_NAME(BTTLookATTargetPoint)
+#include UE_INLINE_GENERATED_CPP_BY_NAME(BTTask_LookATTargetPoint)
 
-UBTTLookATTargetPoint::UBTTLookATTargetPoint(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UBTTask_LookATTargetPoint::UBTTask_LookATTargetPoint(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// enable ticking
 	bNotifyTick = true;
@@ -28,13 +28,13 @@ UBTTLookATTargetPoint::UBTTLookATTargetPoint(const FObjectInitializer& ObjectIni
 	TurnSpeed = 0.03f;
 
 	// accept only actors and vectors
-	BlackboardKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTLookATTargetPoint, BlackboardKey), AActor::StaticClass());
-	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTLookATTargetPoint, BlackboardKey));
+	BlackboardKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey), AActor::StaticClass());
+	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey));
 
 	TargetLocation = FVector(0, 0, 0);
 }
 
-EBTNodeResult::Type UBTTLookATTargetPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_LookATTargetPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* Controller = OwnerComp.GetAIOwner();
 	Pawn = Cast<AEnemyAI>(Controller->GetPawn());
@@ -53,7 +53,7 @@ EBTNodeResult::Type UBTTLookATTargetPoint::ExecuteTask(UBehaviorTreeComponent& O
 	return NodeResult;
 }
 
-EBTNodeResult::Type UBTTLookATTargetPoint::UpdateLookAtTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_LookATTargetPoint::UpdateLookAtTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	AAIController* Controller = OwnerComp.GetAIOwner();
@@ -80,7 +80,7 @@ EBTNodeResult::Type UBTTLookATTargetPoint::UpdateLookAtTask(UBehaviorTreeCompone
 	return NodeResult;
 }
 
-void UBTTLookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTTask_LookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
