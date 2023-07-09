@@ -3,16 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTTaskNode.h"
-#include "BTTargetPointResolve.generated.h"
+#include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "BTTask_FindCloseTarget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WAVEGAME_API UBTTargetPointResolve : public UBTTaskNode
+class WAVEGAME_API UBTTask_FindCloseTarget : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
+	
+public:
+	UBTTask_FindCloseTarget(const FObjectInitializer& ObjectInitializer);
+
+private:
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

@@ -65,6 +65,7 @@ void AEnemyAIBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, 
 		{
 			GetWorldTimerManager().ClearTimer(TimerHandle_StartAttack);
 			// adding a little bit of delay before attack so we have time to play the turn animation towards the turret
+			// calling our attack beign function after delay within the timer callback?
 			FTimerDelegate TimerDel;
 			TimerDel.BindUFunction(this, FName("BeginAttack"), AIC);
 			GetWorldTimerManager().SetTimer(TimerHandle_StartAttack, TimerDel, 1.0f, false, 1.0f);

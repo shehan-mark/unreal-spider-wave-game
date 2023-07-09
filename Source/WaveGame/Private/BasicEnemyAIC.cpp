@@ -40,7 +40,7 @@ void ABasicEnemyAIC::OnPossess(APawn* InPawn)
 
 	CurrentPawn = Cast<AEnemyAI>(InPawn);
 	check(GEngine != nullptr);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TREE STARTED!!!!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TREE STARTED!!!!"));
 	if (CurrentPawn)
 	{
 		if (CurrentPawn->BehaviorTree->BlackboardAsset)
