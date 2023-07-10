@@ -21,7 +21,7 @@ UBTTask_FindCloseTarget::UBTTask_FindCloseTarget(const FObjectInitializer& Objec
 */
 EBTNodeResult::Type UBTTask_FindCloseTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Executing Task"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Executing Task"));
 	EBTNodeResult::Type NodeResult = EBTNodeResult::InProgress;
 
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(OwnerComp.GetAIOwner());

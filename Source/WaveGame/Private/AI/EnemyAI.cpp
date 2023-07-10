@@ -4,7 +4,11 @@
 
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
-#include "GameFramework/FloatingPawnMovement.h" 
+#include "GameFramework/FloatingPawnMovement.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "AI/BasicEnemyAIC.h"
 
 // Sets default values
 AEnemyAI::AEnemyAI()
@@ -32,6 +36,9 @@ AEnemyAI::AEnemyAI()
 	//PawnMovementComponent->turn
 	bUseControllerRotationYaw = true;
 	
+
+	DamageAmount = 10.f;
+	AfterLifeTime = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -53,5 +60,26 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemyAI::Attack()
+{
+	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(GetController());
+	AActor* CurrentTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject("TargetActor"));
+	if (CurrentTarget)
+	{
+		UGameplayStatics::ApplyDamage(CurrentTarget, DamageAmount, AIController, this, DamageType);
+	}
+}
+
+void AEnemyAI::Die()
+{
+	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(GetController());
+	if (AIController)
+	{
+		AIController->UnPossess();
+		AIController->SetLifeSpan(AfterLifeTime);
+		SetLifeSpan(AfterLifeTime);
+	}
 }
 

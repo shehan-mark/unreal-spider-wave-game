@@ -9,10 +9,10 @@
 UENUM(BlueprintType)
 enum class EnemyState : uint8
 {
-	IDLE = 0 UMETA(DisplayName = "IDLE"),
-	MOVING = 1 UMETA(DisplayName = "MOVING"),
-	DEAD = 2 UMETA(DisplayName = "DEAD"),
-	ATTACK = 3 UMETA(DisplayName = "ATTACK"),
+	WANDERING = 0 UMETA(DisplayName = "WANDERING"),
+	CHASING = 1 UMETA(DisplayName = "CHASING"),
+	ATTACK = 2 UMETA(DisplayName = "ATTACK"),
+	DEAD = 3 UMETA(DisplayName = "DEAD"),
 	STUNNED = 4 UMETA(DisplayName = "STUNNED")
 };
 
@@ -47,6 +47,15 @@ protected:
 
 	EnemyState EnemyStatus;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Offense")
+	float DamageAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Offense")
+	TSubclassOf<class UDamageType> DamageType;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character")
+	float AfterLifeTime;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -62,5 +71,14 @@ public:
 	EnemyState GetEnemyStatus() { return EnemyStatus; };
 
 	UFUNCTION(BlueprintCallable)
+	void SetEnemyStatus(EnemyState State) { EnemyStatus = State; };
+
+	UFUNCTION(BlueprintCallable)
 	class UFloatingPawnMovement* GetPawnMovementComponent() { return PawnMovementComponent; };
+
+	UFUNCTION()
+	void Attack();
+
+	UFUNCTION()
+	void Die();
 };
