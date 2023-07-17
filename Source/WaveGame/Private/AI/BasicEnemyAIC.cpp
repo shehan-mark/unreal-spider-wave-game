@@ -213,10 +213,11 @@ void ABasicEnemyAIC::StartAttack()
 	//GetWorldTimerManager().SetTimer(TimerHandle_EnemyAttack, this, &ABasicEnemyAIC::AttackTarget, CurrentPawn->AttackRate, true, 0.0f);
 }
 
-void ABasicEnemyAIC::AttackTarget()
+bool ABasicEnemyAIC::AttackTarget(ATurretHead* Target)
 {
-	float DistanceToAttack = GetSelfToTargetPointLength(FVector(CurrentTargetActorLoc.X, CurrentTargetActorLoc.Y, CurrentPawn->GetActorLocation().Z));
-	bool bCloseEnoughToDoDamage = DistanceToAttack <= AttackRadius;
+	return CurrentPawn->Damage(Target);
+	/*float DistanceToAttack = GetSelfToTargetPointLength(FVector(CurrentTargetActorLoc.X, CurrentTargetActorLoc.Y, CurrentPawn->GetActorLocation().Z));
+	bool bCloseEnoughToDoDamage = DistanceToAttack <= AttackRadius;*/
 	/*if (bCloseEnoughToDoDamage && CurrentPawn->CurrentDamageTarget && CurrentPawn->CurrentDamageTarget->GetTurretStatus() != TurretState::DEAD)
 	{
 		CurrentPawn->DoDamage();

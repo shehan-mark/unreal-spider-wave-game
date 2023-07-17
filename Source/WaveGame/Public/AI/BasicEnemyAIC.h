@@ -92,7 +92,7 @@ public:
 	void UpdateNextPath(FVector StartLocation, FVector EndLocation);
 
 	UFUNCTION(BlueprintCallable)
-	void AttackTarget();
+	bool AttackTarget(ATurretHead* Target);
 
 	UFUNCTION(BlueprintCallable)
 	void StartAttack();

@@ -77,7 +77,7 @@ public:
 	class UFloatingPawnMovement* GetPawnMovementComponent() { return PawnMovementComponent; };
 
 	UFUNCTION()
-	void Attack();
+	bool Damage(class ATurretHead* Target);
 
 	UFUNCTION()
 	void Die();

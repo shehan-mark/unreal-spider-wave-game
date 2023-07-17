@@ -2,13 +2,13 @@
 
 #include "AI/EnemyAI.h"
 
-#include "WaveGame/WaveGame.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "Player/TurretHead.h"
 #include "AI/BasicEnemyAIC.h"
 
 // Sets default values
@@ -63,14 +63,11 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemyAI::Attack()
+bool AEnemyAI::Damage(ATurretHead* Target)
 {
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(GetController());
-	AActor* CurrentTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR));
-	if (CurrentTarget)
-	{
-		UGameplayStatics::ApplyDamage(CurrentTarget, DamageAmount, AIController, this, DamageType);
-	}
+	UGameplayStatics::ApplyDamage(Target, DamageAmount, AIController, this, DamageType);
+	return true;
 }
 
 void AEnemyAI::Die()
