@@ -14,7 +14,7 @@ class WAVEGAME_API UBTDecorator_CloseEnough : public UBTDecorator_BlackboardBase
 {
 	GENERATED_BODY()
 
-protected:
+public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float MinimumDistance;

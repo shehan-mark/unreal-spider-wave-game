@@ -28,8 +28,8 @@ UBTTask_LookATTargetPoint::UBTTask_LookATTargetPoint(const FObjectInitializer& O
 	TurnSpeed = 0.03f;
 
 	// accept only actors and vectors
-	BlackboardKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey), AActor::StaticClass());
-	BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey));
+	//BlackboardKey.AddObjectFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey), AActor::StaticClass());
+	//BlackboardKey.AddVectorFilter(this, GET_MEMBER_NAME_CHECKED(UBTTask_LookATTargetPoint, BlackboardKey));
 
 	TargetLocation = FVector(0, 0, 0);
 }
@@ -71,6 +71,16 @@ EBTNodeResult::Type UBTTask_LookATTargetPoint::UpdateLookAtTask(UBehaviorTreeCom
 			EnemyManager->SetEnemyTargetLocation(Pawn->GetName(), TargetLocation);
 		}
 		//DrawDebugDirectionalArrow(GetWorld(), Pawn->GetActorLocation(), TargetLocation, 5.0f, FColor::Red, true, 3.0f);
+	}
+	else if (BlackboardKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
+	{
+		auto Value = Blackboard->GetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID());
+		AActor* TargetActor = Cast<AActor>(Value);
+		FVector TargetActorLocation = FVector(TargetActor->GetActorLocation().X, TargetActor->GetActorLocation().Y, 50.0f);
+
+		// I might want to set this target location in the Enemy Manager to avoid all enemies move to it anyway.
+		// But for now its fine to keep it like this.
+		TargetLocation = TargetActorLocation;
 	}
 	else
 	{

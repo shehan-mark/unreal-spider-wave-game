@@ -2,6 +2,8 @@
 
 
 #include "AI/BasicEnemyAIC.h"
+
+#include "WaveGame/WaveGame.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
@@ -19,12 +21,11 @@
 #include "AI/EnemyAI.h"
 #include "Player/TurretHead.h"
 
-
 ABasicEnemyAIC::ABasicEnemyAIC()
 {
 	BlackBoardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackBoardComponent"));
 	BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
-	TargetLocationKey = "TargetLocation";
+	TargetLocationKey = BB_KEY_ENEMY_TARGET_LOCATION;
 
 	TargetPointReachThreshold = 50.f;
 	AttackRadius = 190.0f;

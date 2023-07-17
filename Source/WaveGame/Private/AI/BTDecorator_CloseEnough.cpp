@@ -2,6 +2,8 @@
 
 
 #include "AI/BTDecorator_CloseEnough.h"
+
+#include "WaveGame//WaveGame.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "AI/BasicEnemyAIC.h"
@@ -10,7 +12,7 @@ UBTDecorator_CloseEnough::UBTDecorator_CloseEnough()
 {
 	NodeName = "Target Close Enough Check";
 
-	MinimumDistance = 200.f;
+	MinimumDistance = 220.f;
 }
 
 bool UBTDecorator_CloseEnough::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
@@ -18,14 +20,16 @@ bool UBTDecorator_CloseEnough::CalculateRawConditionValue(UBehaviorTreeComponent
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(OwnerComp.GetOwner());
 	FVector OwnerLocation = AIController->GetPawn()->GetActorLocation();
 
-	AActor* CurrentTargettedActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject("TargetActor"));
+	AActor* CurrentTargettedActor = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR));
 	FVector CurrentTargettedActorLocation = CurrentTargettedActor->GetActorLocation();
 	CurrentTargettedActorLocation = FVector(CurrentTargettedActorLocation.X, CurrentTargettedActorLocation.Y, 50.f);
-
+	
+	//DrawDebugDirectionalArrow(GetWorld(), OwnerLocation, CurrentTargettedActorLocation, 5.0f, FColor::Red, true, 3.0f);
+	
 	if (CurrentTargettedActor)
 	{
 		FVector DistanceVector = CurrentTargettedActorLocation - OwnerLocation;
-		if (DistanceVector.Size() < MinimumDistance)
+		if (DistanceVector.Size() <= MinimumDistance)
 		{
 			return true;
 		}

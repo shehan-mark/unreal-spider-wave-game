@@ -2,6 +2,7 @@
 
 #include "AI/EnemyAI.h"
 
+#include "WaveGame/WaveGame.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -65,7 +66,7 @@ void AEnemyAI::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemyAI::Attack()
 {
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(GetController());
-	AActor* CurrentTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject("TargetActor"));
+	AActor* CurrentTarget = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR));
 	if (CurrentTarget)
 	{
 		UGameplayStatics::ApplyDamage(CurrentTarget, DamageAmount, AIController, this, DamageType);

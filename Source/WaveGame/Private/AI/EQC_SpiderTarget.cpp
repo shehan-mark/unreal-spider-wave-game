@@ -2,6 +2,8 @@
 
 
 #include "AI/EQC_SpiderTarget.h"
+
+#include "WaveGame/WaveGame.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_Actor.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -19,7 +21,7 @@ void UEQC_SpiderTarget::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQue
 
 	if (EnemyAIC && EnemyAIC->BlackBoardComponent)
 	{
-		AActor* TargetActor = Cast<AActor>(EnemyAIC->BlackBoardComponent->GetValueAsObject("TargetActor"));
+		AActor* TargetActor = Cast<AActor>(EnemyAIC->BlackBoardComponent->GetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR));
 		//Set the context SeeingPawn to the provided context data
 		UEnvQueryItemType_Actor::SetContextHelper(ContextData, TargetActor);
 	}
