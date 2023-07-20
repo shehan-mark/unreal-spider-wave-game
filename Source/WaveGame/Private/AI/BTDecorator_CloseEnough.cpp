@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "AI/BasicEnemyAIC.h"
+#include "AI/EnemyAI.h"
 
 UBTDecorator_CloseEnough::UBTDecorator_CloseEnough()
 {
@@ -31,7 +32,12 @@ bool UBTDecorator_CloseEnough::CalculateRawConditionValue(UBehaviorTreeComponent
 		FVector DistanceVector = CurrentTargettedActorLocation - OwnerLocation;
 		if (DistanceVector.Size() <= MinimumDistance)
 		{
+			AIController->UpdateStatus(EnemyState::ATTACK);
 			return true;
+		}
+		else
+		{
+			AIController->UpdateStatus(EnemyState::CHASING);
 		}
 	}
 

@@ -17,7 +17,6 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 
-//#include "EnemyAIBase.h"
 #include "AI/EnemyAI.h"
 #include "Player/TurretHead.h"
 
@@ -73,6 +72,26 @@ void ABasicEnemyAIC::Tick(float DeltaTime)
 		CurrentPawn->SetActorLocation(FMath::Lerp(CurrentPawn->GetActorLocation(), PushedBackToPoint, TurnSpeed));
 	}*/
 	
+}
+
+void ABasicEnemyAIC::UpdateStatus(EnemyState State)
+{
+	CurrentPawn->SetEnemyStatus(State);
+}
+
+bool ABasicEnemyAIC::AttackTarget(ATurretHead* Target)
+{
+	return CurrentPawn->Damage(Target);
+	/*float DistanceToAttack = GetSelfToTargetPointLength(FVector(CurrentTargetActorLoc.X, CurrentTargetActorLoc.Y, CurrentPawn->GetActorLocation().Z));
+	bool bCloseEnoughToDoDamage = DistanceToAttack <= AttackRadius;*/
+	/*if (bCloseEnoughToDoDamage && CurrentPawn->CurrentDamageTarget && CurrentPawn->CurrentDamageTarget->GetTurretStatus() != TurretState::DEAD)
+	{
+		CurrentPawn->DoDamage();
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle_EnemyAttack);
+	}*/
 }
 
 /*
@@ -206,27 +225,12 @@ void ABasicEnemyAIC::ResetPushBack()
 	bPushingBack = false;
 }
 
-void ABasicEnemyAIC::StartAttack()
-{
+//void ABasicEnemyAIC::StartAttack()
+//{
 	//UE_LOG(LogTemp, Warning, TEXT("STARTING TO ATTACK..."));
 	//CurrentPawn->SetEnemyStatus(EnemyState::ATTACK);
 	//GetWorldTimerManager().SetTimer(TimerHandle_EnemyAttack, this, &ABasicEnemyAIC::AttackTarget, CurrentPawn->AttackRate, true, 0.0f);
-}
-
-bool ABasicEnemyAIC::AttackTarget(ATurretHead* Target)
-{
-	return CurrentPawn->Damage(Target);
-	/*float DistanceToAttack = GetSelfToTargetPointLength(FVector(CurrentTargetActorLoc.X, CurrentTargetActorLoc.Y, CurrentPawn->GetActorLocation().Z));
-	bool bCloseEnoughToDoDamage = DistanceToAttack <= AttackRadius;*/
-	/*if (bCloseEnoughToDoDamage && CurrentPawn->CurrentDamageTarget && CurrentPawn->CurrentDamageTarget->GetTurretStatus() != TurretState::DEAD)
-	{
-		CurrentPawn->DoDamage();
-	}
-	else
-	{
-		GetWorldTimerManager().ClearTimer(TimerHandle_EnemyAttack);
-	}*/
-}
+//}
 
 float ABasicEnemyAIC::GetSelfToTargetPointLength(FVector TargetPoint)
 {

@@ -99,7 +99,7 @@ void AEnemyAIBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 void AEnemyAIBase::BeginAttack(ABasicEnemyAIC* AIC)
 {
-	AIC->StartAttack();
+	//AIC->StartAttack();
 }
 
 // Called every frame

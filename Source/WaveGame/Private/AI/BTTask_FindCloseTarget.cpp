@@ -9,6 +9,7 @@
 
 #include "Player/TurretHead.h"
 #include "AI/BasicEnemyAIC.h"
+#include "AI/EnemyAI.h"
 
 UBTTask_FindCloseTarget::UBTTask_FindCloseTarget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -28,6 +29,7 @@ EBTNodeResult::Type UBTTask_FindCloseTarget::ExecuteTask(UBehaviorTreeComponent&
 	EBTNodeResult::Type NodeResult = EBTNodeResult::InProgress;
 
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(OwnerComp.GetAIOwner());
+	AIController->UpdateStatus(EnemyState::WANDERING);
 
 	TArray<AActor*> TurretTargets;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretHead::StaticClass(), TurretTargets);
@@ -35,7 +37,7 @@ EBTNodeResult::Type UBTTask_FindCloseTarget::ExecuteTask(UBehaviorTreeComponent&
 	{
 		UBlackboardComponent* BlackboardComp = AIController->BlackBoardComponent;
 		BlackboardComp->SetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR, TurretTargets[0]);
-
+		AIController->UpdateStatus(EnemyState::CHASING);
 	}
 	NodeResult = EBTNodeResult::Succeeded;
 

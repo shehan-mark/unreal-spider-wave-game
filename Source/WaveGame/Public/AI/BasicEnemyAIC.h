@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "AI/EnemyAI.h"
+
 #include "BasicEnemyAIC.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDirectionUpdate, FVector, StartLocation, FVector, EndLocation);
@@ -94,8 +96,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool AttackTarget(ATurretHead* Target);
 
-	UFUNCTION(BlueprintCallable)
-	void StartAttack();
+	/*UFUNCTION(BlueprintCallable)
+	void StartAttack();*/
 
 	bool CheckIfNextTargetPointReached();
 
@@ -103,5 +105,7 @@ public:
 
 	UFUNCTION()
 	void ResetPushBack();
+
+	void UpdateStatus(EnemyState State);
 
 };
