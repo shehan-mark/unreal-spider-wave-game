@@ -21,6 +21,7 @@ EBTNodeResult::Type UBTTask_EnemyDoDamage::ExecuteTask(UBehaviorTreeComponent& O
 	EBTNodeResult::Type NodeResult = EBTNodeResult::Failed;
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	ABasicEnemyAIC* EnemyAIController = Cast<ABasicEnemyAIC>(OwnerComp.GetAIOwner());
+	EnemyAIController->UpdateStatus(EnemyState::ATTACK);
 
 	ATurretHead* TurretHead = Cast<ATurretHead>(Blackboard->GetValueAsObject(BB_KEY_ENEMY_TARGET_ACTOR));
 	if (TurretHead)

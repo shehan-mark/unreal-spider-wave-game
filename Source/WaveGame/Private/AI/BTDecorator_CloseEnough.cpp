@@ -32,7 +32,6 @@ bool UBTDecorator_CloseEnough::CalculateRawConditionValue(UBehaviorTreeComponent
 		FVector DistanceVector = CurrentTargettedActorLocation - OwnerLocation;
 		if (DistanceVector.Size() <= MinimumDistance)
 		{
-			AIController->UpdateStatus(EnemyState::ATTACK);
 			return true;
 		}
 		else
