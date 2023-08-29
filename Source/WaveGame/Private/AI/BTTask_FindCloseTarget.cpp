@@ -31,6 +31,9 @@ EBTNodeResult::Type UBTTask_FindCloseTarget::ExecuteTask(UBehaviorTreeComponent&
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(OwnerComp.GetAIOwner());
 	AIController->UpdateStatus(EnemyState::WANDERING);
 
+	/*AEnemyAI* Pawn = Cast<AEnemyAI>(AIController->GetPawn());
+	Pawn->SetIsTurning(false);*/
+
 	TArray<AActor*> TurretTargets;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretHead::StaticClass(), TurretTargets);
 	if (TurretTargets.Num() != 0 && AIController)

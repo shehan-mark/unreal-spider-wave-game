@@ -56,6 +56,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Character")
 	float AfterLifeTime;
 
+	bool IsTurning;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -81,4 +83,10 @@ public:
 
 	UFUNCTION()
 	void Die();
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsTurning(bool Turning) { IsTurning = Turning; };
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsTurning() { return IsTurning; };
 };

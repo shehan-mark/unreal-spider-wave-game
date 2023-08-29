@@ -55,6 +55,8 @@ EBTNodeResult::Type UBTTask_LookATTargetPoint::ExecuteTask(UBehaviorTreeComponen
 
 EBTNodeResult::Type UBTTask_LookATTargetPoint::UpdateLookAtTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	// starting to turn
+	Pawn->SetIsTurning(true);
 	const UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	AAIController* Controller = OwnerComp.GetAIOwner();
 	
@@ -99,7 +101,7 @@ void UBTTask_LookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint
 	if (TargetLocation.IsNearlyZero()) return;
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("---------------------------------------"));
-	
+
 	// How much rotation needs to face the target.
 	FVector PawnDirectionVector = Pawn->GetActorForwardVector() + Pawn->GetActorLocation();
 	//DrawDebugDirectionalArrow(GetWorld(), PawnDirectionVector, TargetLocation, 5.0f, FColor::Blue, true, 3.0f);
@@ -123,6 +125,7 @@ void UBTTask_LookATTargetPoint::TickTask(UBehaviorTreeComponent& OwnerComp, uint
 	{
 		// Finish task
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Finishing The Task"));
+		Pawn->SetIsTurning(false);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	
