@@ -10,7 +10,7 @@
 #include "BasicProjectileDamage.h"
 #include "DrawDebugHelpers.h"
 #include "Player/TurretHead.h"
-#include "AI/BasicEnemyAIC.h"
+#include "AI/EnemyAI.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -62,9 +62,7 @@ void ABasicProjectile::Tick(float DeltaTime)
 
 void ABasicProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
-	//UE_LOG(LogTemp, Warning, TEXT("ABasicProjectile::OnHit %s"), *OtherActor->GetName());
-	AEnemyAIBase* HitEnemy = Cast<AEnemyAIBase>(OtherActor);
+	AEnemyAI* HitEnemy = Cast<AEnemyAI>(OtherActor);
 	if (HitEnemy)
 	{
 		/* Reduce velocity of the projectile to minimize the effect after hitting the enemy */
@@ -77,7 +75,8 @@ void ABasicProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 			UGameplayStatics::ApplyDamage(HitEnemy, 50.0f, Ctrl, this, DamageType);
 		}
 
-		FVector EnemyCurentLocation = OtherActor->GetActorLocation();
+		// below logic can be decide later.
+		/*FVector EnemyCurentLocation = OtherActor->GetActorLocation();
 		FVector DamageCauserLocation = ProjectileOwner->GetActorLocation();
 
 		FVector Dir = EnemyCurentLocation - FVector(0.0f, 0.0f, EnemyCurentLocation.Z);
@@ -92,7 +91,7 @@ void ABasicProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 		if (EnemyAIC)
 		{
 			EnemyAIC->PushBack(NewPos);
-		}
+		}*/
 	}
 
 }

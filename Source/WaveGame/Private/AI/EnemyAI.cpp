@@ -10,6 +10,7 @@
 
 #include "Player/TurretHead.h"
 #include "AI/BasicEnemyAIC.h"
+#include "Common/HealthComponentBase.h"
 
 // Sets default values
 AEnemyAI::AEnemyAI()
@@ -36,7 +37,8 @@ AEnemyAI::AEnemyAI()
 	PawnMovementComponent->MaxSpeed = MovementSpeed;
 	//PawnMovementComponent->turn
 	bUseControllerRotationYaw = true;
-	
+
+	EnemyHealthComponent = CreateDefaultSubobject<UHealthComponentBase>(TEXT("EnemyHealthComponent"));
 
 	DamageAmount = 10.f;
 	AfterLifeTime = 1.0f;

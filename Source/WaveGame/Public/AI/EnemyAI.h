@@ -22,40 +22,46 @@ class WAVEGAME_API AEnemyAI : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	AEnemyAI();
-
+	
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Mass")
-	float MovementSpeed;
-
 	UPROPERTY(VisibleAnywhere, Category = "Mass")
 	class USkeletalMeshComponent* SkeletalMeshComponent;
 
+	// component to detect incoming damage and collision with the world.
 	UPROPERTY(VisibleAnywhere, Category = "Mass")
 	class USphereComponent* SphereComponent;
 
+	// component to represent the area that the enemy takes in the world.
 	UPROPERTY(VisibleAnywhere, Category = "Mass")
 	class USphereComponent* SphereComponentArea;
 
 	UPROPERTY(VisibleAnywhere, Category = "Mass")
 	class UFloatingPawnMovement* PawnMovementComponent;
 
-	EnemyState EnemyStatus;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Offense")
-	float DamageAmount;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Offense")
 	TSubclassOf<class UDamageType> DamageType;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	class UHealthComponentBase* EnemyHealthComponent;
+
+	EnemyState EnemyStatus;
+
+	// basic damage amount the enemy can inflict.
+	UPROPERTY(EditDefaultsOnly, Category = "Offense")
+	float DamageAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Mass")
+	float MovementSpeed;
+	
+	// how many seconds the enemy stay in the world after dying.
 	UPROPERTY(EditDefaultsOnly, Category = "Character")
 	float AfterLifeTime;
 
+	// to detect if the enemy is turning towards something or not.
 	bool IsTurning;
 
 protected:
@@ -63,6 +69,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	// Sets default values for this pawn's properties
+	AEnemyAI();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

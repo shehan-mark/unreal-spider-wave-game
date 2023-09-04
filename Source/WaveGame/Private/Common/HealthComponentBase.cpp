@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Player/TurretHead.h"
-#include "EnemyAIBase.h"
+#include "AI/EnemyAI.h"
 #include "Player/WaveGamePlayerController.h"
 
 // Sets default values for this component's properties
@@ -58,7 +58,7 @@ void UHealthComponentBase::HandleTakeAnyDamage(AActor* DamagedActor, float Damag
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 	
 	ATurretHead* PlayerRef = Cast<ATurretHead>(DamagedActor);
-	AEnemyAIBase* EnemyRef = Cast<AEnemyAIBase>(DamagedActor);
+	AEnemyAI* EnemyRef = Cast<AEnemyAI>(DamagedActor);
 	
 	if (PlayerRef)
 	{
