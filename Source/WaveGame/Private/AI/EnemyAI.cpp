@@ -41,7 +41,7 @@ AEnemyAI::AEnemyAI()
 	EnemyHealthComponent = CreateDefaultSubobject<UHealthComponentBase>(TEXT("EnemyHealthComponent"));
 
 	DamageAmount = 10.f;
-	AfterLifeTime = 1.0f;
+	AfterLifeTime = 3.0f;
 }
 
 // Called when the game starts or when spawned
@@ -80,6 +80,7 @@ void AEnemyAI::Die()
 		AIController->UnPossess();
 		AIController->SetLifeSpan(AfterLifeTime);
 		SetLifeSpan(AfterLifeTime);
+		EnemyStatus = EnemyState::DEAD;
 	}
 }
 
