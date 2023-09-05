@@ -70,7 +70,7 @@ public:
 
 	class AWaveGamePlayerController* CurrentPlayerController;
 
-	class UUserWidget* CurrentActiveWidget;
+	class USubViewBase* CurrentActiveWidget;
 
 public:
 

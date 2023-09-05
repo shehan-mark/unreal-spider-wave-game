@@ -17,12 +17,6 @@ void UInGameHUD::NativeConstruct()
 	// Initial health status
 	HealthBar_HUD->SetPercent(1);
 	AbilityBar_HUD->SetPercent(0);
-
-	CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (CurrentPlayerController)
-	{
-		CurrentPlayerController->OnPlayerReady.AddDynamic(this, &UInGameHUD::BindPlayerEvents);
-	}
 }
 
 void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -40,6 +34,7 @@ void UInGameHUD::UpdateHealthBar(float Health)
 
 void UInGameHUD::BindPlayerEvents()
 {
+	UE_LOG(LogTemp, Error, TEXT("------------------- PLAYER READY"));
 	CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	if (CurrentPlayerController && CurrentPlayerController->OwningPawn)
@@ -54,4 +49,15 @@ void UInGameHUD::UpdateAbilityBar(float AbilityAmount)
 {
 	float PercentageValue = AbilityAmount / 100.f;
 	AbilityBar_HUD->SetPercent(PercentageValue);
+}
+
+void UInGameHUD::Init()
+{
+	Super::Init();
+	CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (CurrentPlayerController && !CurrentPlayerController->OnPlayerReady.Contains(this, "BindPlayerEvents"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("------------------- BINDING PLAYER READY EVENT TO IN GAME HUD VIEW"));
+		CurrentPlayerController->OnPlayerReady.AddDynamic(this, &UInGameHUD::BindPlayerEvents);
+	}
 }

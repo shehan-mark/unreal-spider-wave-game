@@ -20,6 +20,7 @@ public:
 
 public:
 
+	virtual void Init();
 
 protected:
 

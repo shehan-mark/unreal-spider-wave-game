@@ -38,6 +38,8 @@ public:
 	UFUNCTION()
 	void UpdateAbilityBar(float AbilityAmount);
 
+	virtual void Init() override;
+
 protected:
 
 	virtual void NativeConstruct() override;

@@ -19,11 +19,6 @@ void AWaveGamePlayerController::BeginPlay()
 	{
 		CurrentGameInstance->InitiateUI();
 	}
-	ATurretHead* TurretPawn = Cast<ATurretHead>(this->GetPawn());
-	if (TurretPawn)
-	{
-		OwningPawn = TurretPawn;
-	}
 }
 
 //void AWaveGamePlayerController::AddPitchInput(float Val)
@@ -58,6 +53,7 @@ void AWaveGamePlayerController::OnPossess(APawn* aPawn)
 	if (TurretPawn)
 	{
 		OwningPawn = TurretPawn;
+		UE_LOG(LogTemp, Warning, TEXT("------------------- BROADCASTING........................................"));
 		OnPlayerReady.Broadcast();
 	}
 }

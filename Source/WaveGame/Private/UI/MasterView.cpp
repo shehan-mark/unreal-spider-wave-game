@@ -64,6 +64,7 @@ void UMasterView::UpdateUIToState()
 	case EMenuState::INROUND:
 		CurrentActiveWidget = InGameHUD_WBP;
 		WidgetSwitcherRoot->SetActiveWidgetIndex(1);
+		CurrentActiveWidget->Init();
 		DisableUserInteractionsForUI();
 		break;
 	case EMenuState::PAUSED:
