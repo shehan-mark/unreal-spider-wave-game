@@ -12,6 +12,7 @@
 #include "Player/WaveGamePlayerController.h"
 #include "Player/TurretHead.h"
 #include "UI/GameOverView.h"
+#include "UI/InGameHUD.h"
 
 void UMasterView::NativeConstruct()
 {
@@ -99,6 +100,11 @@ void UMasterView::StartGame()
 		GameMode->DestroyAndStartOver();
 		// reseting player score
 		CurrentPlayerController->OwningPawn->ResetPlayerScore();
+		UInGameHUD* InGameHUD = Cast<UInGameHUD>(InGameHUD_WBP);
+		if (InGameHUD)
+		{
+			InGameHUD->UpdateHealthBar(100.f);
+		}
 	}
 	UpdateUIToState();
 }

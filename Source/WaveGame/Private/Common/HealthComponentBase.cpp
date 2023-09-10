@@ -76,8 +76,6 @@ void UHealthComponentBase::HandleTakeAnyDamage(AActor* DamagedActor, float Damag
 
 		if (PlayerRef)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Died"));
-
 			PlayerRef->Die();
 		}
 	}

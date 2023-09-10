@@ -53,7 +53,6 @@ void AWaveGamePlayerController::OnPossess(APawn* aPawn)
 	if (TurretPawn)
 	{
 		OwningPawn = TurretPawn;
-		UE_LOG(LogTemp, Warning, TEXT("------------------- BROADCASTING........................................"));
 		OnPlayerReady.Broadcast();
 	}
 }

@@ -34,14 +34,18 @@ void UInGameHUD::UpdateHealthBar(float Health)
 
 void UInGameHUD::BindPlayerEvents()
 {
-	UE_LOG(LogTemp, Error, TEXT("------------------- PLAYER READY"));
 	CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	if (CurrentPlayerController && CurrentPlayerController->OwningPawn)
 	{
-		CurrentPlayerController->OwningPawn->OnHealthUpdate.AddDynamic(this, &UInGameHUD::UpdateHealthBar);
-		UpdateHealthBar(100.f);
-		CurrentPlayerController->OwningPawn->OnAbilityAmountUpdate.AddDynamic(this, &UInGameHUD::UpdateAbilityBar);
+		if (!CurrentPlayerController->OwningPawn->OnHealthUpdate.Contains(this, "UpdateHealthBar"))
+		{
+			CurrentPlayerController->OwningPawn->OnHealthUpdate.AddDynamic(this, &UInGameHUD::UpdateHealthBar);
+		}
+		if (!CurrentPlayerController->OwningPawn->OnHealthUpdate.Contains(this, "UpdateAbilityBar"))
+		{
+			CurrentPlayerController->OwningPawn->OnAbilityAmountUpdate.AddDynamic(this, &UInGameHUD::UpdateAbilityBar);
+		}
 	}
 }
 
@@ -54,10 +58,12 @@ void UInGameHUD::UpdateAbilityBar(float AbilityAmount)
 void UInGameHUD::Init()
 {
 	Super::Init();
-	CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	
+	BindPlayerEvents();
+	/*CurrentPlayerController = Cast<AWaveGamePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (CurrentPlayerController && !CurrentPlayerController->OnPlayerReady.Contains(this, "BindPlayerEvents"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("------------------- BINDING PLAYER READY EVENT TO IN GAME HUD VIEW"));
 		CurrentPlayerController->OnPlayerReady.AddDynamic(this, &UInGameHUD::BindPlayerEvents);
-	}
+	}*/
 }
