@@ -46,7 +46,6 @@ void UMasterView::NativeConstruct()
 	if (CurrentPlayerController)
 	{
 		CurrentPlayerController->OnPressEscape.AddDynamic(this, &UMasterView::HandleEscape);
-		CurrentPlayerController->OnPlayerReady.AddDynamic(this, &UMasterView::BindPlayerEvents);
 	}
 
 	// intial menu
@@ -107,6 +106,7 @@ void UMasterView::StartGame()
 			InGameHUD->UpdatePlayerScore(true);
 			InGameHUD->UpdateAbilityBar(0.0f);
 		}
+		BindPlayerEvents();
 	}
 	UpdateUIToState();
 }
@@ -179,7 +179,10 @@ void UMasterView::BindPlayerEvents()
 {
 	if (CurrentPlayerController && IsValid(CurrentPlayerController->OwningPawn))
 	{
-		CurrentPlayerController->OwningPawn->OnPlayerDied.AddDynamic(this, &UMasterView::GameOver);
+		if (!CurrentPlayerController->OwningPawn->OnPlayerDied.Contains(this, "GameOver"))
+		{
+			CurrentPlayerController->OwningPawn->OnPlayerDied.AddDynamic(this, &UMasterView::GameOver);
+		}
 	}
 }
 
