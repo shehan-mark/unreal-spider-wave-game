@@ -38,6 +38,9 @@ public:
 	UFUNCTION()
 	void UpdateAbilityBar(float AbilityAmount);
 
+	UFUNCTION()
+	void UpdatePlayerScore(bool NeedRest);
+
 	virtual void Init() override;
 
 protected:

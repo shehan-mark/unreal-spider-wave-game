@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Player/TurretHead.h"
+#include "Player/WaveGamePlayerController.h"
 #include "AI/BasicEnemyAIC.h"
 #include "Common/HealthComponentBase.h"
 
@@ -72,7 +73,7 @@ bool AEnemyAI::Damage(ATurretHead* Target)
 	return true;
 }
 
-void AEnemyAI::Die()
+void AEnemyAI::Die(AController* InstigatedBy)
 {
 	ABasicEnemyAIC* AIController = Cast<ABasicEnemyAIC>(GetController());
 	if (AIController)
@@ -81,6 +82,16 @@ void AEnemyAI::Die()
 		AIController->SetLifeSpan(AfterLifeTime);
 		SetLifeSpan(AfterLifeTime);
 		EnemyStatus = EnemyState::DEAD;
+		LetPlayerKnowAboutDying(InstigatedBy);
+	}
+}
+
+void AEnemyAI::LetPlayerKnowAboutDying(AController* InstigatedBy)
+{
+	AWaveGamePlayerController* CurrentPlayerController = Cast<AWaveGamePlayerController>(InstigatedBy);
+	if (CurrentPlayerController)
+	{
+		CurrentPlayerController->OwningPawn->OnPlayerScored.Broadcast(false);
 	}
 }
 

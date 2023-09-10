@@ -91,11 +91,14 @@ public:
 	bool Damage(class ATurretHead* Target);
 
 	UFUNCTION()
-	void Die();
+	void Die(AController* InstigatedBy);
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsTurning(bool Turning) { IsTurning = Turning; };
 
 	UFUNCTION(BlueprintCallable)
 	bool GetIsTurning() { return IsTurning; };
+
+	UFUNCTION()
+	void LetPlayerKnowAboutDying(AController* InstigatedBy);
 };

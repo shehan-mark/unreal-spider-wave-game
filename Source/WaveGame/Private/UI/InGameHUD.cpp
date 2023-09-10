@@ -22,8 +22,7 @@ void UInGameHUD::NativeConstruct()
 void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	/*FText TextScore = FText::FromString(FString::SanitizeFloat(CurrentPlayerController->OwningPawn->GetScore()));
-	TextBlock_ScoreValue->SetText(TextScore);*/
+	
 }
 
 void UInGameHUD::UpdateHealthBar(float Health)
@@ -42,9 +41,15 @@ void UInGameHUD::BindPlayerEvents()
 		{
 			CurrentPlayerController->OwningPawn->OnHealthUpdate.AddDynamic(this, &UInGameHUD::UpdateHealthBar);
 		}
-		if (!CurrentPlayerController->OwningPawn->OnHealthUpdate.Contains(this, "UpdateAbilityBar"))
+		
+		if (!CurrentPlayerController->OwningPawn->OnAbilityAmountUpdate.Contains(this, "UpdateAbilityBar"))
 		{
 			CurrentPlayerController->OwningPawn->OnAbilityAmountUpdate.AddDynamic(this, &UInGameHUD::UpdateAbilityBar);
+		}
+		
+		if (!CurrentPlayerController->OwningPawn->OnPlayerScored.Contains(this, "UpdatePlayerScore"))
+		{
+			CurrentPlayerController->OwningPawn->OnPlayerScored.AddDynamic(this, &UInGameHUD::UpdatePlayerScore);
 		}
 	}
 }
@@ -53,6 +58,17 @@ void UInGameHUD::UpdateAbilityBar(float AbilityAmount)
 {
 	float PercentageValue = AbilityAmount / 100.f;
 	AbilityBar_HUD->SetPercent(PercentageValue);
+}
+
+void UInGameHUD::UpdatePlayerScore(bool NeedRest)
+{
+	if (NeedRest)
+	{
+		TextBlock_ScoreValue->SetText(FText::FromString("0"));
+		return;
+	}
+	FText TextScore = FText::FromString(FString::SanitizeFloat(CurrentPlayerController->OwningPawn->GetScore()));
+	TextBlock_ScoreValue->SetText(TextScore);
 }
 
 void UInGameHUD::Init()

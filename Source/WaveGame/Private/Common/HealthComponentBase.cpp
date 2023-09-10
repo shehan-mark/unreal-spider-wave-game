@@ -62,7 +62,6 @@ void UHealthComponentBase::HandleTakeAnyDamage(AActor* DamagedActor, float Damag
 	
 	if (PlayerRef)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Getting Damage"));
 		PlayerRef->OnHealthUpdate.Broadcast(Health);
 	}
 
@@ -70,8 +69,7 @@ void UHealthComponentBase::HandleTakeAnyDamage(AActor* DamagedActor, float Damag
 	{
 		if (EnemyRef)
 		{
-			LetPlayerKnowEnemyKill(InstigatedBy);
-			EnemyRef->Die();
+			EnemyRef->Die(InstigatedBy);
 		}
 
 		if (PlayerRef)
@@ -92,13 +90,3 @@ void UHealthComponentBase::ResetHealth()
 	}
 }
 
-void UHealthComponentBase::LetPlayerKnowEnemyKill(AController* InstigatedBy)
-{
-	//UE_LOG(LogTemp, Error, TEXT("DAMAGE INSTIGATED BY %s"), *InstigatedBy->GetName());
-	AWaveGamePlayerController* CurrentPlayerController = Cast<AWaveGamePlayerController>(InstigatedBy);
-	if (CurrentPlayerController)
-	{
-		CurrentPlayerController->OwningPawn->OnPlayerScored.Broadcast(false);
-	}
-
-}

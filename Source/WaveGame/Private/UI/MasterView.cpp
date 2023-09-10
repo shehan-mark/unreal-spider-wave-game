@@ -104,6 +104,8 @@ void UMasterView::StartGame()
 		if (InGameHUD)
 		{
 			InGameHUD->UpdateHealthBar(100.f);
+			InGameHUD->UpdatePlayerScore(true);
+			InGameHUD->UpdateAbilityBar(0.0f);
 		}
 	}
 	UpdateUIToState();

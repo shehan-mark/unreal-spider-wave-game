@@ -34,5 +34,4 @@ public:
 	
 	void ResetHealth();
 
-	void LetPlayerKnowEnemyKill(AController* InstigatedBy);
 };
