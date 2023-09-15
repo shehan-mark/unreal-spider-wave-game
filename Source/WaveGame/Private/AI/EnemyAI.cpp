@@ -27,7 +27,7 @@ AEnemyAI::AEnemyAI()
 	SphereComponentArea = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponentArea"));
 	SphereComponentArea->InitSphereRadius(120.f);
 	SphereComponentArea->SetCollisionProfileName(TEXT("EnemyMass"));
-	SphereComponent->SetupAttachment(RootComponent);
+	SphereComponentArea->SetupAttachment(RootComponent);
 
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
 	SkeletalMeshComponent->SetCanEverAffectNavigation(false);
