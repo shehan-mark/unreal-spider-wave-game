@@ -6,15 +6,15 @@
 #include "GameFramework/Pawn.h"
 #include "EnemyAIBase.generated.h"
 
-UENUM(BlueprintType)
-enum class EnemyState : uint8
-{
-	IDLE = 0 UMETA(DisplayName = "IDLE"),
-	MOVING = 1 UMETA(DisplayName = "MOVING"),
-	DEAD = 2 UMETA(DisplayName = "DEAD"),
-	ATTACK = 3 UMETA(DisplayName = "ATTACK"),
-	STUNNED = 4 UMETA(DisplayName = "STUNNED")
-};
+//UENUM(BlueprintType)
+//enum class EnemyState : uint8
+//{
+//	IDLE = 0 UMETA(DisplayName = "IDLE"),
+//	MOVING = 1 UMETA(DisplayName = "MOVING"),
+//	DEAD = 2 UMETA(DisplayName = "DEAD"),
+//	ATTACK = 3 UMETA(DisplayName = "ATTACK"),
+//	STUNNED = 4 UMETA(DisplayName = "STUNNED")
+//};
 
 UCLASS()
 class WAVEGAME_API AEnemyAIBase : public APawn
@@ -47,9 +47,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HealthComponent")
 	float LifeSpanAfterDeath;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	class UBehaviorTree* BehaviorTree;
+
 protected:
 
-	EnemyState EnemyStatus;
+	//EnemyState EnemyStatus;
 
 	UPROPERTY()
 	bool Stunned;
@@ -76,10 +79,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetEnemyStatus(EnemyState Status);
+	/*void SetEnemyStatus(EnemyState Status);
 
 	UFUNCTION(BlueprintCallable)
-	EnemyState GetEnemyStatus();
+	EnemyState GetEnemyStatus();*/
 
 	void DoDamage();
 

@@ -22,8 +22,25 @@ public:
 	
 	class UMasterView* SpawnedMasterView;
 
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UWaveGameManagerHub> ManagerHubClass;
+
+	UPROPERTY()
+	class UWaveGameManagerHub* ManagerHub = nullptr;
+
+protected:
+
+	virtual void PostInitProperties();
+
 public:
 
 	void InitiateUI();
+
+	/**
+	* Get the manager hub object that contains all the managers.
+	*/
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	class UWaveGameManagerHub* GetManagerHub() const { return ManagerHub; }
 	
 };

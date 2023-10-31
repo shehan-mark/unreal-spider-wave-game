@@ -27,7 +27,7 @@ class WAVEGAME_API AWaveGameMode : public AGameModeBase
 public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GameMode");
-	TSubclassOf<class AEnemyAIBase> SpawnEnemy;
+	TSubclassOf<class AEnemyAI> SpawnEnemy;
 
 	/*UPROPERTY(EditDefaultsOnly, Category = "GameMode");
 	TSubclassOf<class AEnemyAIBase> SpawnEnemyBoss;*/

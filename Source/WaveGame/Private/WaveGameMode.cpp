@@ -3,15 +3,17 @@
 #include "WaveGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
-#include "EnemyAIBase.h"
-#include "BasicProjectile.h"
-#include "TurretHead.h"
-#include "WaveGamePlayerController.h"
+#include "Player/BasicProjectile.h"
+#include "Player/TurretHead.h"
+#include "AI/EnemyAI.h"
+//#include "EnemyAIBase.h"
+
+#include "Player/WaveGamePlayerController.h"
 
 AWaveGameMode::AWaveGameMode()
 {
 	TimeBetweenWaves = 2.0f;
-	SpawnCircleRadius = 1000.0f;
+	SpawnCircleRadius = 2000.0f;
 	MaxWaveCount = 5;
 	EnemyWaveMultiplier = 2;
 
@@ -72,13 +74,13 @@ void AWaveGameMode::CheckWaveState()
 
 	bool bIsAnyEnemyAlive = false;
 	TArray<AActor*> EnemiesInWorld;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIBase::StaticClass(), EnemiesInWorld);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAI::StaticClass(), EnemiesInWorld);
 
 	if (EnemiesInWorld.Num() > 0)
 	{
 		for (int i = 0; i < EnemiesInWorld.Num(); i++)
 		{
-			AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(EnemiesInWorld[i]);
+			AEnemyAI* Enemy = Cast<AEnemyAI>(EnemiesInWorld[i]);
 			if (Enemy && Enemy->GetEnemyStatus() != EnemyState::DEAD)
 			{
 				bIsAnyEnemyAlive = true;
@@ -90,7 +92,7 @@ void AWaveGameMode::CheckWaveState()
 	/*for (FConstPawnIterator It = GetWorld()->GetPawnIterator(); It; ++It)
 	{
 		APawn* _Pawn = It->Get();
-		AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(_Pawn);
+		AEnemyAI* Enemy = Cast<AEnemyAI>(_Pawn);
 		if (Enemy && Enemy->GetEnemyStatus() != EnemyState::DEAD)
 		{
 			bIsAnyEnemyAlive = true;
@@ -109,6 +111,8 @@ void AWaveGameMode::SpawnNewEnemy()
 {
 	if (IsValid(SpawnEnemy))
 	{
+		check(GEngine != nullptr);
+
 		FActorSpawnParameters SpawnParams;
 
 		// finding random location/ point in a circle to spawn enemies.
@@ -116,17 +120,24 @@ void AWaveGameMode::SpawnNewEnemy()
 		float XCoordinate = FMath::Cos(Theta) * SpawnCircleRadius;
 		float YCoordinate = FMath::Sin(Theta) * SpawnCircleRadius;
 
-		AEnemyAIBase* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyAIBase>(SpawnEnemy, FVector(XCoordinate, YCoordinate, 20.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
+		AEnemyAI* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyAI>(SpawnEnemy, FVector(XCoordinate, YCoordinate, 55.0f), FRotator(0.0f, 0.0f, 0.0f), SpawnParams);
 
-		// maintain of enemy loop game logic
-		NumOfEnemiesToSpawn--;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TRYING TO SPAWN NEW ENEMY"));
 
-		if (NumOfEnemiesToSpawn <= 0)
+		if(SpawnedEnemy != nullptr)
 		{
-			// done spawning for the current wave
-			GetWorldTimerManager().ClearTimer(TimerHandle_EnemySpawner);
-			WaveStatus = WaveGameModeState::WAVEINPROGRESS;
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("SPAWNING NEW ENEMY - SUCCESS"));
+			// maintain of enemy loop game logic
+			NumOfEnemiesToSpawn--;
+
+			if (NumOfEnemiesToSpawn <= 0)
+			{
+				// done spawning for the current wave
+				GetWorldTimerManager().ClearTimer(TimerHandle_EnemySpawner);
+				WaveStatus = WaveGameModeState::WAVEINPROGRESS;
+			}
 		}
+
 	}
 }
 
@@ -158,12 +169,12 @@ void AWaveGameMode::EndWave()
 void AWaveGameMode::DestroyAndStartOver()
 {
 	// this array has to be the type of AActor because GetAllActorsOfClass is not a template function
-	// so cannot pass the exact AEnemyAIBase type. Will have to cast on iteration
+	// so cannot pass the exact AEnemyAI type. Will have to cast on iteration
 	TArray<AActor*> EnemyAIs;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAIBase::StaticClass(), EnemyAIs);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAI::StaticClass(), EnemyAIs);
 	for (AActor* TActor : EnemyAIs)
 	{
-		AEnemyAIBase* Enemy = Cast<AEnemyAIBase>(TActor);
+		AEnemyAI* Enemy = Cast<AEnemyAI>(TActor);
 
 		if (Enemy != nullptr)
 		{
